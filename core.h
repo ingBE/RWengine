@@ -27,5 +27,10 @@ namespace RWengine
         {
             return x*x + y*y + z*z;
         }
+        
+        Vector3 operator+( Vector3 vector )
+        {
+            return Vector3( x + vector.x, y + vector.y, z + vector.z );
+        }
     };
 }
