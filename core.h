@@ -1,5 +1,3 @@
-cyclone/core.h
-
 namespace cyclone {
 
     class Vector3
