@@ -47,13 +47,13 @@ namespace RWengine
             }
         }
 
-        void makeOrthonormalBasis( Vector3 a, Vector3 b, Vector3 c )
+        void makeOrthonormalBasis( Vector3 *a, Vector3 *b, Vector3 *c )
         {
-            a.normalize();
-            c = a % b;
-            if ( c.magnitude() == (real)0 ) { return; }
-            c.normalize();
-            b = c % a;
+            a->normalize();
+            (*c) = (*a) % (*b);
+            if ( c->magnitude() == (real)0 ) { return; }
+            c->normalize();
+            (*b) = (*c) % (*a);
         }
 
         // operator
