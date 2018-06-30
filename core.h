@@ -21,6 +21,13 @@ namespace RWengine
 
         // function
         
+        void clear()
+        {
+            x = 0;
+            y = 0;
+            z = 0;
+        }
+
         void invert()
         {
             x = -x;

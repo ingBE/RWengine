@@ -1,15 +1,10 @@
-#include <assert.h>
-#include "precision.h"
-#include "core.h"
-#include "particle.h"
-
 using namespace RWengine;
 
 void Particle::integrate( real duration )
 {
     if ( inverseMass <= 0.0 ) { return; }
 
-    assert( duration > 0.0 );
+    assert( duration >= 0.0 );
 
     position += velocity * duration;
 
@@ -21,7 +16,7 @@ void Particle::integrate( real duration )
     clearAccumulator();
 }
 
-void Particle::setPositon( const Vector3 positon )
+void Particle::setPosition( const Vector3 position )
 {
     Particle::position = position;
 }
@@ -38,21 +33,21 @@ Vector3 Particle::getPosition()
     return position;
 }
 
-void Particle::setVelocity( const Vector3 velosity )
+void Particle::setVelocity( const Vector3 velocity )
 {
-    Partcle::velosity = velosity;
+    Particle::velocity = velocity;
 }
 
-void Particle::setVelosity( const real x, const real y, const real z)
+void Particle::setVelocity( const real x, const real y, const real z)
 {
-    velosity.x = x;
-    velosity.y = y;
-    velosity.z = z;
+    velocity.x = x;
+    velocity.y = y;
+    velocity.z = z;
 }
 
-Vector3 Particle::getVelosity()
+Vector3 Particle::getVelocity()
 {
-    real velosity;
+    real velocity;
 }
 
 void Particle::setAcceleration( const Vector3 acceleration )
