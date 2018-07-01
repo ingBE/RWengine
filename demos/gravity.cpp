@@ -27,8 +27,10 @@ int a=0, b=0;
 
 void renderScene(void)
 {
-    /*  계산과 비슷한지 측정
-    if (particle.getPosition().z <= 0 and particle.getPosition().x != 0)
+    //  현실과 비슷한지 측정
+    //  실제로는 ( -4.285, 5.000, 0.000) 1.429sec
+    /*
+    if (particle.getPosition().z <= 0.0 and particle.getPosition().z > -0.15 and particle.getPosition().x != 0)
     {
         b = glutGet(GLUT_ELAPSED_TIME);
         particle.getPosition().display();
