@@ -8,13 +8,29 @@
 
 using namespace RWengine;
 
-Particle particle;
-Vector3 position;
-Vector3 gravity( 0, 0, -9.8 );
+Particle sun;
+Particle earth;
+Vector3 sun_position;
+Vector3 earth_position;
+real g = 1.0;
 real duration;
 
-float x = 5, y = -2, z = 1;
-float lx = -6, ly = 5, lz = 0;
+Vector3 gravity( Particle p1, Particle p2 )
+{
+    Vector3 r;
+    r = p2.getPosition() - p1.getPosition();
+
+    real m1 = p1.getMass(), m2 = p2.getMass();
+
+    real sqr = r.squareMagnitude();
+    r.normalize();
+    //r.invert();
+
+    return r*((g*m1*m2)/sqr);
+}
+
+float x = 0.0, y = 0.0, z = 15.0;
+float lx = 0.0, ly = 0.01, lz = -30.0;
 
 void changeSize(int width, int height)
 {
@@ -27,22 +43,11 @@ int a=0, b=0;
 
 void renderScene(void)
 {
-    //  현실과 비슷한지 측정
-    //  실제로는 ( -4.285, 5.000, 0.000) 1.429sec
-    /*
-    if (particle.getPosition().z <= 0.0 and particle.getPosition().z > -0.15 and particle.getPosition().x != 0)
-    {
-        b = glutGet(GLUT_ELAPSED_TIME);
-        particle.getPosition().display();
-        std::cout << (float)(b-a)/1000 << "sec" << std::endl << std::endl;
-    }
-    */
-
     start = end; end=glutGet(GLUT_ELAPSED_TIME);
     duration = (float)(end-start)/1000.0;
 
-    position = particle.getPosition();
-    particle.addForce( gravity * particle.getMass() );
+    sun_position = sun.getPosition();
+    earth_position = earth.getPosition();
 
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glEnable(GL_BLEND);
@@ -51,37 +56,35 @@ void renderScene(void)
     glEnable(GL_POLYGON_SMOOTH);
 
     glPushMatrix();
+        glCreateCoordinate( 100.0, 100.0, 100.0 );
+        glColor3f( 1.0, 1.0, 0.0 );
+        glTranslatef( sun_position.y, sun_position.z, sun_position.x );
+        glutSolidSphere( 0.1, 50, 50 );
+    glPopMatrix();
 
-    glCreateCoordinate( 100.0, 100.0, 100.0 );
-    glColor3f( 0.0, 0.0, 0.0 );
-    for ( float i=-100; i<=100; i++)
-    {
-        glBegin(GL_LINE_STRIP);
-            glVertex3f( -100, 0.0, i );
-            glVertex3f( 100, 0.0, i );
-        glEnd();
-    }
-    for ( float i=-100; i<=100; i++)
-    {
-        glBegin(GL_LINE_STRIP);
-            glVertex3f( i, 0.0, -100 );
-            glVertex3f( i, 0.0, 100 );
-        glEnd();
-    }
-    glCreateGround( 100, 100 );
-
-    glColor3f( 1.0, 0.5, 0.0 );
-
-    glTranslatef( position.y, position.z, position.x );
-    glutSolidSphere( 0.075, 50, 50 );
-
+    glPushMatrix();
+        glColor3f( 0.0, 1.0, 0.0 );
+        glTranslatef( earth_position.y, earth_position.z, earth_position.x );
+        glutSolidSphere( 0.05, 50, 50 );
     glPopMatrix();
 
     fps();
 
     glutSwapBuffers();
 
-    particle.integrate( duration );
+    sun.addForce( gravity( sun, earth ) );
+    earth.addForce( gravity( earth, sun ) );
+    /*
+    if ( (b-a) % 100 == 0 ) 
+    {
+        sun.getVelocity().display(); 
+        //earth.getVelocity().display();
+        a = b;
+    }
+    b = end;
+    */
+    sun.integrate( duration );
+    earth.integrate( duration );
 }
 
 void startKey(unsigned char key, int x, int y)
@@ -101,25 +104,26 @@ void startKey(unsigned char key, int x, int y)
             gluLookAt(y,z,x,y+ly,z+lz,x+lx,0.0,1.0,0.0);
             break;
         case '3':
-            x = 5.0, y = 8.0, z = 0.0;
-            lx = -7.0, ly = -6.0, lz = 0.0;
+            x = 0.0, y = 0.0, z = 15.0;
+            lx = 0.0, ly = 0.01, lz = -30.0;
             glLoadIdentity();
             gluLookAt(y,z,x,y+ly,z+lz,x+lx,0.0,1.0,0.0);
             break;
-        case 'A':
-        case 'a':
-            particle.setPosition( 0.0, 0.0, 0.0 );
-            particle.setVelocity( -3.0, 3.5, 7.0 );
-            a = glutGet(GLUT_ELAPSED_TIME);
-            break;
         case 27:
+            //std::cout << (float)end/1000 << "s" << std::endl;
+            //sun.getPosition().display();
             exit(0);
     }
 }
 
 int main(int argc, char **argv )
 {
-    particle.setMass( 1.0 );
+    sun.setPosition( 0.0, 0.0, 0.0 );
+    sun.setVelocity( 0.045, 0.0, 0.0 );
+    sun.setMass( 100.0 );
+    earth.setPosition( 0.0, 5.0, 0.0 );
+    earth.setVelocity( -4.5, 0.0, 0.0 );
+    earth.setMass( 1.0 );
 
     glutInit( argc, argv );
     glutReshapeFunc(changeSize);
