@@ -47,7 +47,7 @@ void Particle::setVelocity( const real x, const real y, const real z)
 
 Vector3 Particle::getVelocity()
 {
-    real velocity;
+    return velocity;
 }
 
 void Particle::setAcceleration( const Vector3 acceleration )
@@ -65,16 +65,6 @@ void Particle::setAcceleration( const real x, const real y, const real z )
 Vector3 Particle::getAcceleration()
 {
     return acceleration;
-}
-
-void Particle::setDamping( const real damping )
-{
-    Particle::damping = damping;
-}
-
-real Particle::getDamping()
-{
-    return damping;
 }
 
 void Particle::setMass( const real mass )

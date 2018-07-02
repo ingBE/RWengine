@@ -6,7 +6,6 @@ namespace RWengine
         Vector3 position;
         Vector3 velocity;
         Vector3 acceleration;
-        real damping;
         real inverseMass;
         Vector3 forceAccum;
 
@@ -21,8 +20,6 @@ namespace RWengine
         void setAcceleration( const Vector3 acceleration );
         void setAcceleration( const real x, const real y, const real z );
         Vector3 getAcceleration();
-        void setDamping( const real dmaping );
-        real getDamping();
         void setMass( const real mass );
         real getMass();
         void setInverseMass( const real inverseMass );

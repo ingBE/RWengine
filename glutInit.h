@@ -70,19 +70,11 @@ void glCreateGround( float x, float y )
 
 void setOrthographicProjection()
 {
-    // 행렬을 투영모드로 변경합니다.
     glMatrixMode(GL_PROJECTION);
-    // 원근투영에 대한 환경변수를 
-    // 가지고 있는 이전 행렬을 저장합니다.
     glPushMatrix();
-        // 행렬을 초기화합니다.
         glLoadIdentity();
-        // 2D 직교투영을 설정합니다.
         gluOrtho2D(0, w, 0, h);
-        // y 축을 뒤집습니다.
         glScalef(1, -1, 1);
-        // 좌측아래의 원점을 
-        // 좌측위로 옮깁니다.
         glTranslatef(0, -h, 0);
     glMatrixMode(GL_MODELVIEW);
 }
@@ -111,7 +103,6 @@ char s[60];
 
 void fps()
 {
-
     frame++;
     time=glutGet(GLUT_ELAPSED_TIME);
     if (time - timebase > 1000)
@@ -126,7 +117,7 @@ void fps()
     glPushMatrix();
         glLoadIdentity();
         setOrthographicProjection();
-        renderBitmapString(30,35,GLUT_BITMAP_9_BY_15,s);
+        renderBitmapString(30,35,GLUT_BITMAP_8_BY_13,s);
     glPopMatrix();
     resetPerspectiveProjection();
 }
